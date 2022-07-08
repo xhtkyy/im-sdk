@@ -1,0 +1,63 @@
+<?php
+/**
+ * @author ThompsonCr
+ * @date 2022/3/24 0024
+ */
+
+namespace KyyIM\Template\src;
+
+use KyyIM\Constants\ErrorCode;
+use KyyIM\Constants\MessageConstant;
+use KyyIM\Exception\ImException;
+use KyyIM\Template\TemplateAbstract;
+use KyyIM\Template\TemplateInterface;
+use Illuminate\Support\Facades\Validator;
+
+/**
+ * 审核模板
+ */
+class Review extends TemplateAbstract implements TemplateInterface {
+
+    /**
+     * @return array
+     * @throws ImException
+     */
+    public function toArray(): array {
+        //验证器验证
+        $validator = Validator::make([
+            "header"  => $this->header,
+            "content" => $this->content
+        ], [
+            'header.institution_id'   => 'required',
+            'header.institution_name' => 'required',
+            'header.institution_logo' => '',
+            'content.title'           => 'required',
+        ]);
+        if ($validator->fails()) {
+            throw new ImException($validator->errors()->first(), ErrorCode::ERROR);
+        }
+        $header = [
+            'institution_id'   => $this->header['institution_id'],
+            'institution_logo' => $this->header['institution_logo'],
+            'institution_name' => $this->header['institution_name'],
+            'institution_type' => $this->header['institution_type'] ?? MessageConstant::BUYER,
+        ];
+        if (isset($this->header['project_id'])) {
+            $header ["project_id"]   = $this->header['project_id'];
+            $header ["project_name"] = $this->header['project_name'] ?? '';
+        }
+        //返回
+        return [
+            "template" => $this->template,
+            "type"     => $this->type,
+            "scene"    => $this->scene,
+            "class"    => $this->message_class,
+            "header"   => $header,
+            "content"  => [
+                'title' => $this->content['title'],
+                'body'  => $this->content['body'] ?? []
+            ],
+            "data"     => $this->data
+        ];
+    }
+}

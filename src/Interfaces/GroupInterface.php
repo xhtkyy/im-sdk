@@ -4,7 +4,6 @@ namespace KyyIM\Interfaces;
 
 /**
  * 群组
- * @package App\Im\Contracts
  */
 interface GroupInterface {
 

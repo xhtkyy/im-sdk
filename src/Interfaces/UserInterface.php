@@ -4,7 +4,6 @@ namespace KyyIM\Interfaces;
 
 /**
  * Interface ImUserInterface
- * @package App\Im\Contracts
  */
 interface UserInterface {
 

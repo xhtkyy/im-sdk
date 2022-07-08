@@ -4,7 +4,6 @@ namespace KyyIM\Interfaces;
 
 /**
  * Interface ImServiceInterface
- * @package App\Im\Contracts
  */
 interface ImInterface {
     /**

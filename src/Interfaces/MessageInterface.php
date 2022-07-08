@@ -7,7 +7,6 @@ use App\Im\Template\TemplateInterface;
 /**
  * 消息
  * Interface ImMessageInterface
- * @package App\Im\Contracts
  */
 interface MessageInterface
 {
