@@ -5,6 +5,7 @@ namespace KyyIM\Services\KyyIm;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Redis\Connections\Connection;
+use Illuminate\Support\Facades\Redis;
 use KyyTools\Facades\Log;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
@@ -55,7 +56,7 @@ trait ImRequest {
         /**
          * @var Connection $redis
          */
-        $redis = app("redis")->connect();
+        $redis = Redis::connect();
         $redis->del(["kyy_im_token"]);
     }
 
