@@ -1,25 +1,24 @@
 {
-    "name": "xhtkyy/im-sdk",
-    "description": "kyy im php sdk",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "thompson",
-            "email": "so.wo@foxmail.com"
-        }
-    ],
-    "keywords": [
-        "kyy",
-        "kyy-im-sdk"
-    ],
-    "minimum-stability": "dev",
-    "require": {
-        "php": ">=7.0",
-        "xhtkyy/tools": "^0.1"
-    },
-    "autoload": {
-        "psr-4": {
-            "KyyIM\\": "src"
-        }
+  "name": "xhtkyy/im-sdk",
+  "description": "kyy im php sdk",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "thompson",
+      "email": "so.wo@foxmail.com"
     }
+  ],
+  "keywords": [
+    "kyy",
+    "kyy-im-sdk"
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "KyyIM\\": "src"
+    }
+  }
 }
