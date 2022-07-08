@@ -26,7 +26,7 @@ class ImServiceProvider extends ServiceProvider {
      */
     public function register() {
         $this->app->singleton(ImInterface::class, function ($app) {
-            $driver       = $app['config']['kyy_im']['default'];
+            $driver       = $app['config']['kyy_im']['default'] ?? 'kyy_im';
             $driver_class = Str::studly($driver);
             return ImServiceManager::{$driver_class}($app["config"]["kyy_im"]["drivers"]["$driver"] ?? []);
         });

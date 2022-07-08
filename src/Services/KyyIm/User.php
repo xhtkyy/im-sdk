@@ -22,7 +22,7 @@ class User extends AbstractKyyIm implements UserInterface {
         ];
         $data   = array_merge($data, $extra);
         $result = $this->requestHttp('post', 'im/users', $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return $result['data']['id'] ?? '';
         }
         return '';
@@ -45,7 +45,7 @@ class User extends AbstractKyyIm implements UserInterface {
         ];
         $data   = array_merge($data, $extra);
         $result = $this->requestHttp('put', 'im/users', $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         }
         return false;
@@ -61,7 +61,7 @@ class User extends AbstractKyyIm implements UserInterface {
             'domain_id' => $this->config['domain_id'],
         ];
         $result = $this->requestHttp('get', 'im/users/' . $userId, $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return $result['data'];
         }
         return [];

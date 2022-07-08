@@ -19,7 +19,7 @@ class Institution extends AbstractKyyIm  implements InstitutionInterface {
             return true;
         }
         $result = $this->requestHttp('post', '/im/institutions/init', $batch);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         } else {
             throw new ImException("im请求[/im/institution/init]失败，错误信息：" . json_encode($result));
@@ -33,7 +33,7 @@ class Institution extends AbstractKyyIm  implements InstitutionInterface {
      */
     public function add(array $batch): bool {
         $result = $this->requestHttp('post', '/im/batch/institutions/add', $batch);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         } else {
             throw new ImException("im请求[/im/batch/institutions/add]失败，错误信息：" . json_encode($result));
@@ -47,7 +47,7 @@ class Institution extends AbstractKyyIm  implements InstitutionInterface {
      */
     public function del(array $batch): bool {
         $result = $this->requestHttp('post', '/im/batch/institutions/del', $batch);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         } else {
             throw new ImException("im请求[/im/batch/institutions/del]失败，错误信息：" . json_encode($result));

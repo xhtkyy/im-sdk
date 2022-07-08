@@ -22,7 +22,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
         ];
         $data   = array_merge($data, $extra);
         $result = $this->requestHttp('post', 'im/channels', $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return $result['data']['id'] ?? '';
         }
         return '';
@@ -41,7 +41,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
             'user_id'    => $userId,
         ];
         $result = $this->requestHttp('post', 'im/channel_users', $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         }
         return false;
@@ -71,7 +71,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
      */
     public function deleteChannelUser(string $channelId, string $userId): bool {
         $result = $this->requestHttp('delete', 'im/channel_users/' . $userId . '?channel_id=' . $channelId);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         }
         return false;
@@ -110,7 +110,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
         ];
         $data   = array_merge($data, $extra);
         $result = $this->requestHttp('post', 'im/channel_users/search', $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return $result['data'];
         }
         return [];
@@ -141,7 +141,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
         ];
         $data   = array_merge($data, $extra);
         $result = $this->requestHttp('post', 'im/sessions', $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return $result['data']['id'] ?? '';
         }
         return '';
@@ -173,7 +173,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
         ];
         $data   = array_merge($data, $extra);
         $result = $this->requestHttp('put', 'im/sessions', $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         }
         return false;
@@ -186,7 +186,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
      */
     public function deleteSession(string $sessionId): bool {
         $result = $this->requestHttp('delete', 'im/sessions/' . $sessionId);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         }
         return false;
@@ -210,7 +210,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
         ];
         $data   = array_merge($data, $extra);
         $result = $this->requestHttp('post', 'im/session_users/search', $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return $result['data'];
         }
         return [];
@@ -227,7 +227,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
             'domain_id'  => $this->config['domain_id'],
             'session_id' => $sessionId,
         ]);
-        if ($result['status']) {
+        if ($result['success']) {
             return $result['data'];
         }
         return [];
@@ -266,7 +266,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
         ];
         $data   = array_merge($data, $extra);
         $result = $this->requestHttp('post', 'im/session_users', $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         }
         //针对IM接口异常处理：添加已存在群成员错误，检查群成员是否存在
@@ -294,7 +294,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
             $data[] = array_merge($commonData, $user);
         }
         $result = $this->requestHttp('post', 'im/batch/session_users/add', $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         }
         return false;
@@ -310,7 +310,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
     public function deleteSessionUser(string $sessionId, string $userId, string $executor_id = ''): bool {
         $url    = sprintf("im/session_users/%s?session_id=%s&executor_id=%s", $userId, $sessionId, $executor_id);
         $result = $this->requestHttp('delete', $url);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         }
         //针对IM接口异常处理：删除不存在群成员错误，检查群成员是否存在
@@ -335,7 +335,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
             'ids'         => $userIds
         ];
         $result = $this->requestHttp('post', 'im/batch/session_users/del', $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         }
         foreach ($userIds as $userId) {
@@ -361,7 +361,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
         ];
         $data   = array_merge($data, $extra);
         $result = $this->requestHttp('put', 'im/session_users', $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         }
         //针对IM接口异常处理：更新不存在群成员错误，检查群成员是否存在
@@ -388,7 +388,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
         ];
         $data   = array_merge($data, $extra);
         $result = $this->requestHttp('post', 'im/contacts', $data);
-        if ($result['status']) {
+        if ($result['success']) {
             return [
                 'id'         => $result['data']['id'],
                 'session_id' => $result['data']['session_id'],
@@ -404,7 +404,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
      */
     public function getConsultSession(string $userId): array {
         $result = $this->requestHttp('get', 'im/consult_sessions/by_user/' . $userId);
-        if ($result['status']) {
+        if ($result['success']) {
             return $result['data'];
         }
         return [];
@@ -422,7 +422,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
             "user_id"          => $im_user_id,
             "can_view_history" => $can_view_history
         ]);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         }
         throw new ImException("IM设置是否可查看历史消息失败");
@@ -440,7 +440,7 @@ class Group extends AbstractKyyIm implements GroupInterface {
             "creator"    => $im_user_id,
             "session_id" => $session_id
         ]);
-        if ($result['status']) {
+        if ($result['success']) {
             return true;
         }
         throw new ImException("IM修改会话群主失败");

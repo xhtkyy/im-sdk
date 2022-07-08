@@ -15,7 +15,7 @@ class ImServiceManager {
      * @throws ImException
      */
     public static function __callStatic($name, $arguments) {
-        $class = "KyyIM\\Service\\$name\\Manager";
+        $class = "KyyIM\\Services\\$name\\Manager";
         if (!class_exists($class)) {
             throw new ImException("Driver Manager Not Found");
         }
