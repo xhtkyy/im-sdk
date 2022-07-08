@@ -25,7 +25,7 @@ trait ImRequest {
         /**
          * @var Connection $redis
          */
-        $redis = app("redis")->connect();
+        $redis = Redis::connect();
         $token = null;
         if ($redis->exists("kyy_im_token")) {
             $token = $redis->get("kyy_im_token");
