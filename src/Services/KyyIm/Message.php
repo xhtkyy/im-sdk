@@ -3,6 +3,7 @@
 namespace KyyIM\Services\KyyIm;
 
 use KyyIM\Interfaces\MessageInterface;
+use KyyIM\Template\TemplateInterface;
 use KyyTools\Facades\Lang;
 
 class Message extends AbstractKyyIm implements MessageInterface {
@@ -12,14 +13,14 @@ class Message extends AbstractKyyIm implements MessageInterface {
     /**
      * 发送通知
      * @param array $user_ids
-     * @param $template
+     * @param TemplateInterface $template
      * @return array
      */
-    public function notice(array $user_ids, $template): array {
+    public function notice(array $user_ids, TemplateInterface $template): array {
         try {
             return $this->requestHttp("POST", '/im/messages/notices', [
                 "user_ids" => array_filter($user_ids),
-                "notice"   => Lang::trans2tw($template)
+                "notice"   => Lang::trans2tw($template->toArray())
             ]);
         } catch (\Exception $exception) {
             return [

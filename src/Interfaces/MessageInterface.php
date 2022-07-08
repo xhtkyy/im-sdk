@@ -2,7 +2,7 @@
 
 namespace KyyIM\Interfaces;
 
-use App\Im\Template\TemplateInterface;
+use KyyIM\Template\TemplateInterface;
 
 /**
  * 消息
@@ -11,5 +11,5 @@ use App\Im\Template\TemplateInterface;
 interface MessageInterface
 {
     // 消息通知
-    public function notice(array $user_ids, $template): array;
+    public function notice(array $user_ids, TemplateInterface $template): array;
 }

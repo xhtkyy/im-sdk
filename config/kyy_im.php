@@ -11,7 +11,7 @@ return [
             'org_id'     => env('IM_ORG_ID', '0'), //默认 0: 快优易
         ],
     ],
-    'models'  => [
+    'class'  => [
         //需要的对象映射
         \KyyIM\Template\Models\Member::class          => \App\Models\Member::class,
         \KyyIM\Template\Models\Kefu::class            => \App\Models\Kefu\Kefu::class,

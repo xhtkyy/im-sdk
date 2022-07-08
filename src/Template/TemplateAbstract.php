@@ -260,9 +260,7 @@ abstract class TemplateAbstract implements TemplateInterface {
             $this->setAPP(APP::SEAT_APP)->sendToApp(array_values($kefu_ids), UserType::KEFU);
         } catch (\Exception $exception) {
             //写入日志
-            writeLog($exception->getCode(), "模板消息发送失败", [
-                "message" => $exception->getMessage()
-            ], 'template_message_error');
+            Log::exception("im-template", $exception);
         }
 
         return true;
