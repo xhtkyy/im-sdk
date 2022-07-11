@@ -14,11 +14,21 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php": ">=7.0"
+    "php": ">=7.0",
+    "xhtkyy/tools": "dev-main",
+    "xhtkyy/third-push": "dev-main",
+    "illuminate/support": "^5.5|^6|^7"
   },
   "autoload": {
     "psr-4": {
       "KyyIM\\": "src"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "KyyIM\\Provider\\ImServiceProvider"
+      ]
     }
   }
 }
