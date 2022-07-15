@@ -31,26 +31,28 @@ class Project extends TemplateAbstract implements TemplateInterface {
             'header.institution_id'   => 'required',
             'header.institution_logo' => '',
             'header.institution_name' => 'required',
-            'header.project_name'     => 'required',
             'content.title'           => 'required',
         ]);
         if ($validator->fails()) {
             throw new ImException($validator->errors()->first(), ErrorCode::ERROR);
         }
+        $header = [
+            'institution_id'   => $this->header['institution_id'],
+            'institution_logo' => $this->header['institution_logo'],
+            'institution_name' => $this->header['institution_name'],
+            'institution_type' => $this->header['institution_type'] ?? MessageConstant::BUYER,
+        ];
+        if (isset($this->header['project_id']) && $this->header['project_id'] != 0) {
+            $header ["project_id"]   = $this->header['project_id'];
+            $header ["project_name"] = $this->header['project_name'] ?? '';
+        }
         //返回
         return [
             "template" => $this->template,
             "type"     => $this->type,
-            "scene"     => $this->scene,
+            "scene"    => $this->scene,
             "class"    => $this->message_class,
-            "header"   => [
-                'institution_id'   => $this->header['institution_id'],
-                'institution_logo' => $this->header['institution_logo'],
-                'institution_name' => $this->header['institution_name'],
-                'institution_type' => $this->header['institution_type'] ?? MessageConstant::BUYER,
-                'project_id'       => $this->header['project_id'] ?? 0,
-                'project_name'     => $this->header['project_name'],
-            ],
+            "header"   => $header,
             "content"  => [
                 'title' => $this->content['title'],
                 'body'  => $this->content['body'] ?? []
