@@ -134,6 +134,7 @@ abstract class TemplateAbstract implements TemplateInterface {
 
 
     public function send(array $user_ids, int $from_user_id = 0, int $from_user_type = ImUserType::MEMBER): bool {
+        $user_ids = array_unique(array_filter($user_ids));
         //处理模板数据
         !empty($header) && $this->setHeaders($header);
         !empty($body) && $this->setContent(["body" => $body]);
@@ -214,6 +215,7 @@ abstract class TemplateAbstract implements TemplateInterface {
     }
 
     public function sendToKefu(array $kefu_ids, int $from_user_id = 0, int $from_user_type = ImUserType::MEMBER): bool {
+        $kefu_ids = array_unique(array_filter($kefu_ids));
         if (empty($kefu_ids)) return false;
         $im  = Im::message();
         $tss = new TemplateMessageService;
