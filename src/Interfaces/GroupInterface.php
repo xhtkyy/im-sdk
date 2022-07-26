@@ -41,6 +41,13 @@ interface GroupInterface {
     public function searchChannelUsers(string $channelId, array $extra = []): array;
 
     /**
+     * 获取会话
+     * @param string $sessionId
+     * @return array
+     */
+    public function getSession(string $sessionId): array;
+
+    /**
      * 创建im session（会话：群）
      * @param string $title 标题
      * @param array $extra 额外的参数

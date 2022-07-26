@@ -148,6 +148,21 @@ class Group extends AbstractKyyIm implements GroupInterface {
     }
 
     /**
+     * 获取im session（会话：群）
+     * @param string $sessionId 群标识
+     * @return array
+     */
+    public function getSession(string $sessionId): array {
+        $result = $this->requestHttp('get', 'im/sessions/' . $sessionId, [
+            'domain_id' => $this->config['domain_id']
+        ]);
+        if ($result['success']) {
+            return $result['data'];
+        }
+        return [];
+    }
+
+    /**
      * 更新im session（会话：群）
      * @param string $sessionId 群标识
      * @param string $title 标题
