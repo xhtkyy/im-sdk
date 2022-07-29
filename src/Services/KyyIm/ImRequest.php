@@ -133,9 +133,9 @@ trait ImRequest {
         }
         if (!$result['success']) {
             $this->saveLogData(['result' => $result]);
-            //写入日志
-            $this->writeLog();
         }
+        //写入日志
+        $this->writeLog();
 
         return $result;
     }
