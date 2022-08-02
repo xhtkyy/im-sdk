@@ -131,10 +131,8 @@ trait ImRequest {
             $result['msg']  = $response->getMessage();
             $result['data'] = $response;
         }
-        if (!$result['success']) {
-            $this->saveLogData(['result' => $result]);
-        }
         //写入日志
+        $this->saveLogData(['result' => $result]);
         $this->writeLog();
 
         return $result;
