@@ -29,14 +29,13 @@ abstract class MessageType {
 
     /**
      * 更新消息状态
-     * @param int|string|array $scenes
      * @param int $status
      * @param int $operator
      * @param int $relation_id
      * @param string $relation_field
      * @return void
      */
-    public static function updateStatusByScene($scenes, int $status, int $operator, int $relation_id, string $relation_field = "data.id"){
+    public static function updateStatusByScene(int $status, int $operator, int $relation_id, string $relation_field = "id"){
         (new TemplateMessageService())->updateStatus(...func_get_args());
     }
 
