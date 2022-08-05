@@ -10,6 +10,8 @@ use KyyIM\Constants\MessageConstant;
 use Exception;
 use KyyIM\Constants\MessageClass;
 use KyyIM\Exception\ImException;
+use KyyIM\Template\Models\TemplateMessage;
+use KyyIM\Template\Services\TemplateMessageService;
 use KyyIM\Template\src\Normal;
 
 /**
@@ -24,6 +26,19 @@ abstract class MessageType {
     protected static $institution_type = MessageConstant::BUYER; //默认采购商
 
     protected static $config = [];
+
+    /**
+     * 更新消息状态
+     * @param int|string|array $scenes
+     * @param int $status
+     * @param int $operator
+     * @param int $relation_id
+     * @param string $relation_field
+     * @return void
+     */
+    public static function updateStatusByScene($scenes, int $status, int $operator, int $relation_id, string $relation_field = "data.id"){
+        (new TemplateMessageService())->updateStatus(...func_get_args());
+    }
 
     /**
      * @throws Exception

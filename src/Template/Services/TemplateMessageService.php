@@ -3,8 +3,12 @@
 namespace KyyIM\Template\Services;
 
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use KyyIM\Constants\MessageConstant;
+use KyyIM\Constants\TemplateMsgStatus\Common;
 use KyyIM\Template\Models\TemplateMessage;
+use KyyTools\Facades\Log;
 
 class TemplateMessageService {
     /**
@@ -45,7 +49,45 @@ class TemplateMessageService {
             ]);
     }
 
-    public function getStatus($id): int {
+    public function getStatus($id) {
+        if (Str::contains($id, ",")) {
+            $id = array_filter(explode(",", $id));
+        }
+        if (is_array($id)) {
+            return TemplateMessage::query()->whereIn("id", $id)->selectRaw("id,status")->get();
+        }
         return TemplateMessage::query()->where("id", '=', $id)->value('status');
+    }
+
+    public function updateStatus($scenes, int $status, int $operator, int $relation_id, string $relation_field = "id"): bool {
+        $query = TemplateMessage::query()
+            ->where($status, "=", Common::WAIT)
+            ->where("message->data->$relation_field", "=", $relation_id);
+        if (is_array($scenes)) {
+            $query->whereIn("type", $scenes);
+        } else {
+            $query->where("type", "=", $scenes);
+        }
+        $list = $query->select("id", "accept_member_id", "status")->get();
+        if ($list->count() > 0) {
+            DB::beginTransaction();
+            try {
+                foreach ($list as $item) {
+                    if ($item->accept_member_id == $operator) {
+                        //操作用户
+                        $item->status = $status;
+                    } else {
+                        $item->status = Common::OTHER_DO; //被人处理
+                    }
+                    $item->save();
+                }
+                DB::commit();
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                Log::channel("template-message")->error("更新模板消息状态失败：" . $exception->getMessage(), func_get_args());
+                return false;
+            }
+        }
+        return true;
     }
 }
