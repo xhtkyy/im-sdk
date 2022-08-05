@@ -68,7 +68,7 @@ class TemplateMessageService {
         } else {
             $query->where("type", "=", $scenes);
         }
-        $list = $query->select("id", "accept_member_id", "status")->get();
+        $list = $query->select(["id", "accept_member_id", "status"])->get();
         if ($list->count() > 0) {
             DB::beginTransaction();
             try {
