@@ -11,5 +11,5 @@ use KyyIM\Template\TemplateInterface;
 interface MessageInterface
 {
     // 消息通知
-    public function notice(array $user_ids, TemplateInterface $template): array;
+    public function notice(array $user_ids, array $notice = [], int $typ = 1): array;
 }

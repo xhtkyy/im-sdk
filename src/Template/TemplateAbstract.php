@@ -156,7 +156,7 @@ abstract class TemplateAbstract implements TemplateInterface {
                 //查找用户ids
                 $im_user_ids = Member::query()->whereIn('member_id', $user_ids)->pluck('im_user_id')->toArray();
                 //发送
-                $imPushRes = $im->notice($im_user_ids, $this);
+                $imPushRes = $im->template($im_user_ids, $this);
                 //保存到数据库
                 foreach ($user_ids as $user_id) {
                     $tss->add(array_merge($this->toArray(), [
@@ -178,7 +178,7 @@ abstract class TemplateAbstract implements TemplateInterface {
                 //查找用户ids
                 $im_user_id = Member::query()->where('member_id', "=", $accept_member_id)->value("im_user_id");
                 //发送im消息
-                $imPushRes = $im->notice([$im_user_id], $this);
+                $imPushRes = $im->template([$im_user_id], $this);
                 //更新消息发送状态
                 TemplateMessage::query()->where("id", "=", $template_message_id)->update([
                     'im_push_status' => $imPushRes['code'] //im推送状态
@@ -227,7 +227,7 @@ abstract class TemplateAbstract implements TemplateInterface {
                 //查找用户ids
                 $im_user_ids = Kefu::query()->whereIn('id', $kefu_ids)->pluck('im_user_id')->toArray();
                 //发送
-                $imPushRes = $im->notice($im_user_ids, $this);
+                $imPushRes = $im->template($im_user_ids, $this);
                 //保存到数据库
                 foreach ($kefu_ids as $kefu_id) {
                     $tss->add(array_merge($this->toArray(), [
@@ -252,7 +252,7 @@ abstract class TemplateAbstract implements TemplateInterface {
                 //查找用户ids
                 $im_user_id = Kefu::query()->where('id', "=", $accept_member_id)->value("im_user_id");
                 //发送im消息
-                $imPushRes = $im->notice([$im_user_id], $this);
+                $imPushRes = $im->template([$im_user_id], $this);
                 //更新消息发送状态
                 TemplateMessage::query()->where("id", "=", $template_message_id)->update([
                     'im_push_status' => $imPushRes['code'] //im推送状态
