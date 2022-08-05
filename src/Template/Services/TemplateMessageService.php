@@ -5,8 +5,10 @@ namespace KyyIM\Template\Services;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use KyyIM\Constants\ImUserType;
 use KyyIM\Constants\MessageConstant;
 use KyyIM\Constants\TemplateMsgStatus\Common;
+use KyyIM\Facades\Im;
 use KyyIM\Template\Models\TemplateMessage;
 use KyyTools\Facades\Log;
 
@@ -61,6 +63,7 @@ class TemplateMessageService {
 
     public function updateStatus($scenes, int $status, int $operator, int $relation_id, string $relation_field = "id"): bool {
         $query = TemplateMessage::query()
+            ->where("accept_member_type", "=", ImUserType::MEMBER) //暂时只支持 访客端模板消息
             ->where("status", "=", Common::WAIT)
             ->where("message->data->$relation_field", "=", $relation_id);
         if (is_array($scenes)) {
@@ -70,9 +73,11 @@ class TemplateMessageService {
         }
         $list = $query->select(["id", "accept_member_id", "status"])->get();
         if ($list->count() > 0) {
+            $update_member_ids = [];
             DB::beginTransaction();
             try {
                 foreach ($list as $item) {
+                    $update_member_ids[] = $item->accept_member_id;
                     if ($item->accept_member_id == $operator) {
                         //操作用户
                         $item->status = $status;
@@ -87,6 +92,10 @@ class TemplateMessageService {
                 Log::channel("template-message")->error("更新模板消息状态失败：" . $exception->getMessage(), func_get_args());
                 return false;
             }
+            //通知用户页面状态更新
+            Im::message()->notice(array_unique($update_member_ids), [
+                "status_update" => true
+            ], 2);
         }
         return true;
     }
