@@ -59,10 +59,15 @@ class TemplateMessageService {
         return TemplateMessage::query()->where("id", '=', $id)->value('status');
     }
 
-    public function updateStatus(int $status, int $operator, int $relation_id, string $relation_field = "id"): bool {
+    public function updateStatus($scenes, int $status, int $operator, int $relation_id, string $relation_field = "id"): bool {
         $query = TemplateMessage::query()
             ->where("status", "=", Common::WAIT)
             ->where("message->data->$relation_field", "=", $relation_id);
+        if (is_array($scenes)) {
+            $query->whereIn("type", $scenes);
+        } else {
+            $query->where("type", "=", $scenes);
+        }
         $list = $query->select("id", "accept_member_id", "status")->get();
         if ($list->count() > 0) {
             DB::beginTransaction();
