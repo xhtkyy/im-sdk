@@ -9,6 +9,7 @@ use KyyIM\Constants\ImUserType;
 use KyyIM\Constants\MessageConstant;
 use KyyIM\Constants\TemplateMsgStatus\Common;
 use KyyIM\Facades\Im;
+use KyyIM\Template\Models\Member;
 use KyyIM\Template\Models\TemplateMessage;
 use KyyTools\Facades\Log;
 
@@ -93,9 +94,9 @@ class TemplateMessageService {
                 return false;
             }
             //通知用户页面状态更新
-            Im::message()->notice(array_unique($update_member_ids), [
-                "status_update" => true
-            ], 2);
+            //查找用户ids
+            $im_user_ids = Member::query()->whereIn('member_id', array_unique($update_member_ids))->pluck("im_user_id")->toArray();
+            $im_user_ids && Im::message()->notice($im_user_ids, ["status_update" => true], 2);
         }
         return true;
     }
