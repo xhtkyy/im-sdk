@@ -7,6 +7,6 @@ namespace KyyIM\Constants\TemplateMsgStatus;
  */
 class JoinInvite {
     const AGREE = 1; //已同意
-    const REFUSE = 4; //拒绝
+    const REFUSE = 2; //拒绝
 }
 
