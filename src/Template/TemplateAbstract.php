@@ -154,17 +154,26 @@ abstract class TemplateAbstract implements TemplateInterface {
                 //多发模式 适用于无状态消息发送
                 //IM推送
                 //查找用户ids
-                $im_user_ids = Member::query()->whereIn('member_id', $user_ids)->pluck('im_user_id')->toArray();
-                //发送
-                $imPushRes = $im->template($im_user_ids, $this);
+                $im_users = Member::query()
+                    ->whereIn('member_id', $user_ids)
+                    ->selectRaw('member_id,im_user_id')
+                    ->get();
                 //保存到数据库
-                foreach ($user_ids as $user_id) {
-                    $tss->add(array_merge($this->toArray(), [
+                foreach ($im_users as $im_user) {
+                    if (empty($im_user->im_user_id)) continue;
+                    $template_message_id = $tss->addGetId(array_merge($this->toArray(), [
                         'from_member_id'   => $from_user_id,
                         'from_member_type' => $from_user_type,
-                        'accept_member_id' => $user_id,
-                        'im_push_status'   => $imPushRes['code'] //im推送状态
+                        'accept_member_id' => $im_user->member_id,
+                        'im_push_status'   => 1000
                     ]));
+                    $this->setData(compact("template_message_id"));
+                    $imPushRes = $im->template([$im_user->im_user_id], $this);
+                    if ($imPushRes['code'] !== 1000) {
+                        TemplateMessage::query()->where("id", "=", $template_message_id)->update([
+                            'im_push_status' => $imPushRes['code'] //im推送状态
+                        ]);
+                    }
                 }
             } else {
                 //单发模式 适用于有状态消息发送
@@ -172,7 +181,8 @@ abstract class TemplateAbstract implements TemplateInterface {
                 $template_message_id = $tss->addGetId(array_merge($this->toArray(), [
                     'from_member_id'   => $from_user_id,
                     'from_member_type' => $from_user_type,
-                    'accept_member_id' => $accept_member_id
+                    'accept_member_id' => $accept_member_id,
+                    'im_push_status'   => 1000
                 ]));
                 $this->setData(compact("template_message_id"));
                 //查找用户ids
@@ -180,9 +190,11 @@ abstract class TemplateAbstract implements TemplateInterface {
                 //发送im消息
                 $imPushRes = $im->template([$im_user_id], $this);
                 //更新消息发送状态
-                TemplateMessage::query()->where("id", "=", $template_message_id)->update([
-                    'im_push_status' => $imPushRes['code'] //im推送状态
-                ]);
+                if ($imPushRes['code'] !== 1000) {
+                    TemplateMessage::query()->where("id", "=", $template_message_id)->update([
+                        'im_push_status' => $imPushRes['code'] //im推送状态
+                    ]);
+                }
             }
             //推送
             $this->sendToApp(array_values($user_ids));
