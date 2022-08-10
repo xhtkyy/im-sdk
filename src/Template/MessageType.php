@@ -34,9 +34,10 @@ abstract class MessageType {
      * @param int $operator
      * @param int $relation_id
      * @param string $relation_field
+     * @param bool $limit_one
      * @return void
      */
-    public static function updateStatusByScene($scenes, int $status, int $operator, int $relation_id, string $relation_field = "id"){
+    public static function updateStatusByScene($scenes, int $status, int $operator, int $relation_id, string $relation_field = "id", bool $limit_one = true) {
         (new TemplateMessageService())->updateStatus(...func_get_args());
     }
 
