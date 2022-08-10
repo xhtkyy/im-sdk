@@ -62,7 +62,7 @@ class TemplateMessageService {
         return TemplateMessage::query()->where("id", '=', $id)->value('status');
     }
 
-    public function updateStatus($scenes, int $status, int $operator, int $relation_id, string $relation_field = "id"): bool {
+    public function updateStatus($scenes, int $status, int $operator, int $relation_id, string $relation_field = "id", bool $limit_one = true): bool {
         $query = TemplateMessage::query()
             ->where("accept_member_type", "=", ImUserType::MEMBER) //暂时只支持 访客端模板消息
             ->where("status", "=", Common::WAIT)
@@ -72,6 +72,9 @@ class TemplateMessageService {
         } else {
             $query->where("type", "=", $scenes);
         }
+        if (!$limit_one && $operator != 0) {
+            $query->where("accept_member_id", "=", $operator);
+        }
         $list = $query->select(["id", "accept_member_id", "status"])->get();
         if ($list->count() > 0) {
             $update_member_ids = [];
@@ -79,8 +82,11 @@ class TemplateMessageService {
             try {
                 foreach ($list as $item) {
                     $update_member_ids[] = $item->accept_member_id;
-                    if ($item->accept_member_id == $operator) {
-                        //操作用户
+                    if ($operator == 0) {
+                        //无指定操作用户
+                        $item->status = $status;
+                    } elseif ($item->accept_member_id == $operator) {
+                        //有操作用户
                         $item->status = $status;
                     } else {
                         $item->status = Common::OTHER_DO; //被人处理
