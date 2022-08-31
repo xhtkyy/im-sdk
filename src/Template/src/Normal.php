@@ -46,7 +46,7 @@ class Normal extends TemplateAbstract implements TemplateInterface {
             ],
             "content"  => [
                 'title' => $this->content['title'],
-                'body'  => $this->content['body']
+                'body'  => $this->content['body'] ?? []
             ],
             "data"     => $this->data,
         ];
