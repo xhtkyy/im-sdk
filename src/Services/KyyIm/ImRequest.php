@@ -78,7 +78,15 @@ trait ImRequest {
                 'Authorization' => 'Bearer ' . $this->getRequestToken(),
             ],
         ];
-        $method  = strtolower($method);
+        if (env('APP_ENV') == 'pre') {
+
+            $proxy            = sprintf("http://%s:%s@%s:%s", $this->config['proxy_user'], $this->config['proxy_pwd'], $this->config['proxy_address'], $this->config['proxy_port']);
+            $options['proxy'] = [
+                'http'  => $proxy,
+                'https' => $proxy,
+            ];
+        }
+        $method = strtolower($method);
         switch ($method) {
             case 'get':
                 $options['query'] = $data;
