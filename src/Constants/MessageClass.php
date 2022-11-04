@@ -13,11 +13,14 @@ class MessageClass {
     const ACTIVITY_NOTICE = 4;
     //群通知
     const GROUP_NOTICE = 5;
+    //合夥人
+    const PARTNER_NOTICE = 6;
 
     const CONSTANT_NAME = [
         self::SERVICE_NOTICE  => "服務通知",
         self::WORK_NOTICE     => "工作事項",
         self::ORDER_NOTICE    => "採購交易",
         self::ACTIVITY_NOTICE => "精選活動",
+        self::PARTNER_NOTICE  => "合夥人信息",
     ];
 }
